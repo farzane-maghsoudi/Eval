@@ -18,7 +18,7 @@ def inception_score() :
 
     logits = inception_logits(inception_images)
 
-    IS = get_inception_score(images, splits=10)
+    IS = get_inception_score(images)
 
     print()
     print("IS : ", IS)
@@ -130,4 +130,4 @@ def mean_kernel_inception_distance() :
 inception_score()
 frechet_inception_distance()
 kernel_inception_distance()
-# mean_kernel_inception_distance()
+mean_kernel_inception_distance()
