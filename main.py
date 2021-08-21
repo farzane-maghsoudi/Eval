@@ -2,6 +2,7 @@ from frechet_kernel_Inception_distance import *
 from inception_score import *
 from glob import glob
 import os
+import tensorflow.compat.v1 as tf
 
 def inception_score() :
     filenames = glob(os.path.join('./fake', '*.*'))
