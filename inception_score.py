@@ -6,6 +6,7 @@ from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import functional_ops
 from scipy import misc
 import cv2
+from skimage.transform import resize
 
 import tensorflow_gan as tfgan
 
@@ -60,5 +61,5 @@ def get_inception_score(batch_size, images, inception_images, logits, splits=10)
 
 def get_images(filename):
     x = cv2.imread(filename)
-    x = misc.imresize(x, size=[299, 299])
+    x = resize(x, output_shape=(299, 299))
     return x
