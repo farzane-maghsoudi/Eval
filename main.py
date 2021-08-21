@@ -17,7 +17,7 @@ def inception_score() :
 
     logits = inception_logits(inception_images)
 
-    IS = get_inception_score(BATCH_SIZE, images, inception_images, logits, splits=10)
+    IS = get_inception_score(images, splits=10)
 
     print()
     print("IS : ", IS)
