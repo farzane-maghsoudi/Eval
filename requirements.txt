@@ -4,3 +4,4 @@ scipy
 tensorflow-gan
 tensorflow-addons
 functools
+scikit-image
