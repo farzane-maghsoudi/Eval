@@ -5,6 +5,7 @@ import time
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import functional_ops
 from scipy import misc
+import cv2
 
 import tensorflow_gan as tfgan
 
@@ -57,6 +58,6 @@ def get_inception_score(batch_size, images, inception_images, logits, splits=10)
     return mean, std  # Reference values: 11.34 for 49984 CIFAR-10 training set images, or mean=11.31, std=0.08 if in 10 splits.
 
 def get_images(filename):
-    x = misc.imread(filename)
+    x = cv2.imread(filename)
     x = misc.imresize(x, size=[299, 299])
     return x
