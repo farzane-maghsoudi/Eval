@@ -15,7 +15,8 @@ session = tf.compat.v1.InteractiveSession()
 def inception_logits(images, num_splits = 1):
     images = tf.transpose(images, [0, 2, 3, 1])
     size = 299
-    images = tf.image.resize_bilinear(images, [size, size])
+    images = tf.image.resize(images, [size, size], method='bilinear')
+    
     generated_images_list = array_ops.split(images, num_or_size_splits = num_splits)
     logits = functional_ops.map_fn(
         fn = functools.partial(tfgan.eval.run_inception, output_tensor = 'logits:0'),
