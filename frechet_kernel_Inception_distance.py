@@ -1,4 +1,4 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import functools
 import numpy as np
 import time
@@ -9,6 +9,18 @@ from tensorflow.python.ops import math_ops
 from tensorflow.python.framework import dtypes
 from tensorflow.python.ops import control_flow_ops
 from scipy import misc
+
+tf.disable_v2_behavior()
+import tensorflow_gan as tfgan
+import os
+import tensorflow_gan as tfgan
+import cv2
+from skimage.transform import resize
+session=tf.compat.v1.InteractiveSession()
+# A smaller BATCH_SIZE reduces GPU memory usage, but at the cost of a slight slowdown
+BATCH_SIZE = 64
+INCEPTION_TFHUB = 'https://tfhub.dev/tensorflow/tfgan/eval/inception/1'
+INCEPTION_OUTPUT = 'pool_3'
 
 #tfgan = tf.contrib.gan
 import tensorflow_gan as tfgan
@@ -286,7 +298,7 @@ def kernel_classifier_distance_and_std_from_activations(real_activations,
                 (math_ops.reduce_sum(k_rr) - math_ops.trace(k_rr)) / (m * (m - 1)) +
                 (math_ops.reduce_sum(k_gg) - math_ops.trace(k_gg)) / (n * (n - 1)))
 
-    ests = functional_ops.map_fn(
+    ests = tf.map_fn(
         compute_kid_block, math_ops.range(n_blocks), dtype=dtype, back_prop=False)
 
     mn = math_ops.reduce_mean(ests)
@@ -304,15 +316,15 @@ def kernel_classifier_distance_and_std_from_activations(real_activations,
 def inception_activations(images, num_splits=1):
     images = tf.transpose(images, [0, 2, 3, 1])
     size = 299
-    images = tf.image.resize_bilinear(images, [size, size])
+    images = tf.compat.v1.image.resize_bilinear(images, [size, size])
     generated_images_list = array_ops.split(images, num_or_size_splits=num_splits)
-    activations = functional_ops.map_fn(
-        fn=functools.partial(tfgan.eval.run_inception, output_tensor='pool_3:0'),
-        elems=array_ops.stack(generated_images_list),
-        parallel_iterations=1,
-        back_prop=False,
-        swap_memory=True,
-        name='RunClassifier')
+    activations = tf.map_fn(
+        fn = tfgan.eval.classifier_fn_from_tfhub(INCEPTION_TFHUB, INCEPTION_OUTPUT, True),
+        elems = array_ops.stack(generated_images_list),
+        parallel_iterations = 1,
+        back_prop = False,
+        swap_memory = True,
+        name = 'RunClassifier')
     activations = array_ops.concat(array_ops.unstack(activations), 0)
     return activations
 
@@ -349,8 +361,6 @@ def get_kid(kcd, batch_size, images1, images2, inception_images, real_activation
     return kcd
 
 def get_images(filename):
-    x = misc.imread(filename)
-    x = misc.imresize(x, size=[299, 299])
+    x = cv2.imread(filename)
+    x = resize(x, output_shape=(299,299))
     return x
-
-
