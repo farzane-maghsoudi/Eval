@@ -6,8 +6,10 @@ from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import functional_ops
 from scipy import misc
 
-tfgan = tf.contrib.gan
-session = tf.InteractiveSession()
+import tensorflow_gan as tfgan
+
+#tfgan = tf.contrib.gan
+session = tf.compat.v1.InteractiveSession()
 
 def inception_logits(images, num_splits = 1):
     images = tf.transpose(images, [0, 2, 3, 1])
