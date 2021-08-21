@@ -1,5 +1,10 @@
 tensorflow
 numpy
+scipy
+tensorflow-gan
+
+
+
 h5py
 opencv-python
 tensorflow-addons
