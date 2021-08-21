@@ -12,7 +12,8 @@ def inception_score() :
     BATCH_SIZE = 1
 
     # Run images through Inception.
-    inception_images = tf.placeholder(tf.float32, [BATCH_SIZE, 3, None, None])
+    tf.compat.v1.disable_eager_execution()
+    inception_images = tf.compat.v1.placeholder(tf.float32, [BATCH_SIZE, 3, None, None])
 
     logits = inception_logits(inception_images)
 
